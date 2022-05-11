@@ -1,39 +1,22 @@
 import requests
-from pprint import pprint
 
-URL = 'https://superheroapi.com/api/2619421814940190/search/Hulk'
-hulk = requests.get(URL).json()
-hulk1 = hulk['results']
-for res in hulk1:
-    if 'powerstats' in res:
-        if 'Hulk' == res['name']:
-            intelligence_hulk = int(res['powerstats']['intelligence'])
-            print(f'Интелект Халка: {intelligence_hulk}')
-            hulk1 = {'name': res['name'], 'smart': intelligence_hulk}
+herolistdata = ['Hulk', 'Captain America', 'Thanos']
 
-URL = 'https://superheroapi.com/api/2619421814940190/search/Captain America'
-captain = requests.get(URL).json()
-captain1 = captain['results']
-for res in captain1:
-    if 'powerstats' in res:
-        intelligence_captain = int(res['powerstats']['intelligence'])
-        print(f'Интелект Капитана Америки: {intelligence_captain}')
-        captain1 = {'name': res['name'], 'smart': intelligence_captain}
+def getdata(herolist):
+    resultdata = {}
+    for hero in herolist:
+        URL = f'https://superheroapi.com/api/2619421814940190/search/{hero}'
+        hero_t = requests.get(URL).json()
+        hero_tt = hero_t['results']
+        for res in hero_tt:
+            if 'powerstats' in res:
+                if hero == res['name']:
+                    intelligence_h = int(res['powerstats']['intelligence'])
+                    print(f'Интелект {hero}: {intelligence_h}')
+                    resultdata[hero] = intelligence_h
 
-URL = 'https://superheroapi.com/api/2619421814940190/search/Thanos'
-thanos = requests.get(URL).json()
-thanos1 = thanos['results']
-for res in thanos1:
-    if 'powerstats' in res:
-        intelligence_thanos = int(res['powerstats']['intelligence'])
-        print(f'Интелект Таноса: {intelligence_thanos}')
-        thanos1 = {'name': res['name'], 'smart': intelligence_thanos}
+    result = max(resultdata)
+    print(f'Самый умный {result}')
 
-if thanos1['smart'] < captain1['smart'] > hulk1['smart']:
-    print(f"Самый умный {captain1['name']}")
-elif captain1['smart'] < thanos1['smart'] > hulk1['smart']:
-    print(f"Самый умный {thanos1['name']}")
-else:
-    print(f"Самый умный {hulk1['name']}")
-
+getdata(herolistdata)
 
